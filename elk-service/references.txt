@@ -1,0 +1,26 @@
+References
+----------
+
+Install Elasticsearch with Docker
+---------------------------------
+https://www.elastic.co/guide/en/elasticsearch/reference/7.5/docker.html
+
+
+Install Kibana with Docker
+--------------------------
+https://www.elastic.co/guide/en/kibana/current/docker.html
+
+
+Encrypting communications in Elasticsearch
+------------------------------------------
+https://www.elastic.co/guide/en/elasticsearch/reference/6.8/configuring-tls.html#tls-transport
+
+
+Configure Kibana
+----------------
+https://www.elastic.co/guide/en/kibana/current/settings.html
+
+
+Cerebro HTTP Basic Configuration
+--------------------------------
+https://github.com/lmenezes/cerebro
