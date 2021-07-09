@@ -70,7 +70,7 @@ services:
     image: kibana:7.13.2
     container_name: kibana
     volumes:
-      - ./conf/kibana.yml:/usr/share/kibana/config/kibana.yml
+      - ./conf/kibana/kibana.yml:/usr/share/kibana/config/kibana.yml
     depends_on:
       - es01
       - es02
@@ -79,7 +79,7 @@ services:
     image: lmenezes/cerebro
     container_name: cerebro
     env_file:
-      - ./envs/cerebro.env
+      - envs/cerebro/cerebro.env
     depends_on:
       - es01
       - es02
