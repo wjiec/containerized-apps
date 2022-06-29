@@ -52,6 +52,8 @@ spec:
               value: {{ include "jaeger.elasticsearch.endpoints" . }}
             - name: cluster.name
               value: {{ .Values.elasticsearch.clusterName }}
+            - name: xpack.security.enabled
+              value: "false"
             - name: ES_JAVA_OPTS
               value: {{ .Values.elasticsearch.javaOpts }}
           ports:

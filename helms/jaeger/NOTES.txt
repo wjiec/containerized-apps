@@ -1,0 +1,4 @@
+1. jaeger-cleaner
+  by design collector caches service names(service name with operation name). If the service index is deleted collector will not recreate the index (and store the data). The cache expiration is set to 48h.
+
+  Make sure you do not delete all service indices and also keep at least 2 days of historical data.
