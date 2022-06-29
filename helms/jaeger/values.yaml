@@ -43,8 +43,11 @@ collector:
     ports:
       http: 14268
 
+
 cleaner:
-  schedule: 0 1 * * *
+  # daily 01:01
+  schedule: 1 1 * * *
+  cleanDays: 7
   image:
     repository: jaegertracing/jaeger-es-index-cleaner
     pullPolicy: IfNotPresent

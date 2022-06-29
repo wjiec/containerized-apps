@@ -1,9 +1,9 @@
 kind: CronJob
-apiVersion: batch/v1
+apiVersion: batch/v1beta1
 metadata:
   name: {{ include "jaeger.cleaner.fullname" . }}
   labels:
-    {{- include "jaeger.cleaner.labels" . }}
+    {{- include "jaeger.cleaner.labels" . | nindent 4 }}
 spec:
   schedule: {{ .Values.cleaner.schedule }}
   jobTemplate:
@@ -11,17 +11,13 @@ spec:
       labels:
         {{- include "jaeger.cleaner.selectorLabels" . | nindent 8 }}
     spec:
-      selector:
-        {{- include "jaeger.cleaner.selectorLabels" . | nindent 8 }}
       template:
-        metadata:
-          labels:
-            {{- include "jaeger.cleaner.selectorLabels" . | nindent 12 }}
         spec:
+          restartPolicy: OnFailure
           containers:
             - name: {{ include "jaeger.cleaner.fullname" . }}
               image: {{ .Values.cleaner.image.repository }}:{{ .Values.cleaner.image.tag | default .Chart.AppVersion }}
               imagePullPolicy: {{ .Values.cleaner.image.pullPolicy }}
               args:
-                - "14"
+                - "{{ .Values.cleaner.cleanDays }}"
                 - {{ include "jaeger.elasticsearch.address" . }}
