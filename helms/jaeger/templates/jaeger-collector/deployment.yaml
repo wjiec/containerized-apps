@@ -1,0 +1,47 @@
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  name: {{ include "jaeger.collector.fullname" . }}
+  labels:
+    {{- include "jaeger.collector.labels" . | nindent 4 }}
+spec:
+  replicas: {{ .Values.collector.replicaCount }}
+  selector:
+    matchLabels:
+      {{- include "jaeger.collector.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      labels:
+        {{- include "jaeger.collector.selectorLabels" . | nindent 8 }}
+    spec:
+      containers:
+        - name: {{ include "jaeger.collector.fullname" . }}
+          image: {{ .Values.collector.image.repository }}:{{ .Values.collector.image.tag | default .Chart.AppVersion }}
+          imagePullPolicy: {{ .Values.collector.image.pullPolicy }}
+          ports:
+            - name: zipkin
+              containerPort: 9411
+              protocol: TCP
+            - name: agent
+              containerPort: 14250
+              protocol: TCP
+            - name: http
+              containerPort: 14268
+              protocol: TCP
+            - name: admin
+              containerPort: 14269
+              protocol: TCP
+          livenessProbe:
+            httpGet:
+              port: admin
+              path: /
+          readinessProbe:
+            httpGet:
+              port: admin
+              path: /
+          envFrom:
+            - configMapRef:
+                name: {{ include "jaeger.fullname" . }}
+          args:
+            - --es.log-level
+            - debug

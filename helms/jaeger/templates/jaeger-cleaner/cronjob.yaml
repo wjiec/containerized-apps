@@ -1,0 +1,27 @@
+kind: CronJob
+apiVersion: batch/v1
+metadata:
+  name: {{ include "jaeger.cleaner.fullname" . }}
+  labels:
+    {{- include "jaeger.cleaner.labels" . }}
+spec:
+  schedule: {{ .Values.cleaner.schedule }}
+  jobTemplate:
+    metadata:
+      labels:
+        {{- include "jaeger.cleaner.selectorLabels" . | nindent 8 }}
+    spec:
+      selector:
+        {{- include "jaeger.cleaner.selectorLabels" . | nindent 8 }}
+      template:
+        metadata:
+          labels:
+            {{- include "jaeger.cleaner.selectorLabels" . | nindent 12 }}
+        spec:
+          containers:
+            - name: {{ include "jaeger.cleaner.fullname" . }}
+              image: {{ .Values.cleaner.image.repository }}:{{ .Values.cleaner.image.tag | default .Chart.AppVersion }}
+              imagePullPolicy: {{ .Values.cleaner.image.pullPolicy }}
+              args:
+                - "14"
+                - {{ include "jaeger.elasticsearch.address" . }}

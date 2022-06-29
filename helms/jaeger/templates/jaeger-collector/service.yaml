@@ -1,0 +1,13 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: {{ include "jaeger.collector.fullname" . }}
+spec:
+  type: {{ .Values.collector.service.type }}
+  ports:
+    - name: http
+      port: {{ .Values.collector.service.ports.http }}
+      protocol: TCP
+      targetPort: http
+  selector:
+    {{- include "jaeger.collector.selectorLabels" . | nindent 4 }}

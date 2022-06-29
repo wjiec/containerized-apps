@@ -1,0 +1,44 @@
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  name: {{ include "jaeger.query.fullname" . }}
+  labels:
+    {{- include "jaeger.query.labels" . | nindent 4 }}
+spec:
+  replicas: {{ .Values.query.replicaCount }}
+  selector:
+    matchLabels:
+      {{- include "jaeger.query.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      labels:
+        {{- include "jaeger.query.selectorLabels" . | nindent 8 }}
+    spec:
+      containers:
+        - name: {{ include "jaeger.query.fullname" . }}
+          image: {{ .Values.query.image.repository }}:{{ .Values.query.image.tag | default .Chart.AppVersion }}
+          imagePullPolicy: {{ .Values.query.image.pullPolicy }}
+          ports:
+            - name: grpc
+              containerPort: 16685
+              protocol: TCP
+            - name: http
+              containerPort: 16686
+              protocol: TCP
+            - name: admin
+              containerPort: 16687
+              protocol: TCP
+          livenessProbe:
+            httpGet:
+              port: admin
+              path: /
+          readinessProbe:
+            httpGet:
+              port: admin
+              path: /
+          envFrom:
+            - configMapRef:
+                name: {{ include "jaeger.fullname" . }}
+          args:
+            - --es.log-level
+            - debug

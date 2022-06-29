@@ -1,0 +1,51 @@
+# Default values for jaeger.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+
+elasticsearch:
+  replicaCount: 3
+  image:
+    repository: elasticsearch
+    pullPolicy: IfNotPresent
+    tag: "7.17.4"
+  service:
+    type: ClusterIP
+    ports:
+      http: 9200
+      transport: 9300
+  clusterName: tracing
+  javaOpts: -Xms4g -Xmx4g
+  sysVmMaxMapCount: 262144
+
+
+query:
+  replicaCount: 1
+  image:
+    repository: jaegertracing/jaeger-query
+    pullPolicy: IfNotPresent
+    tag: ""
+  service:
+    type: ClusterIP
+    ports:
+      http: 80
+      grpc: 8080
+
+
+collector:
+  replicaCount: 1
+  image:
+    repository: jaegertracing/jaeger-collector
+    pullPolicy: IfNotPresent
+    tag: ""
+  service:
+    type: ClusterIP
+    ports:
+      http: 14268
+
+cleaner:
+  schedule: 0 1 * * *
+  image:
+    repository: jaegertracing/jaeger-es-index-cleaner
+    pullPolicy: IfNotPresent
+    tag: "latest"

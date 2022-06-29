@@ -1,0 +1,17 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: {{ include "jaeger.query.fullname" . }}
+spec:
+  type: {{ .Values.query.service.type }}
+  ports:
+    - name: http
+      port: {{ .Values.query.service.ports.http }}
+      protocol: TCP
+      targetPort: http
+    - name: grpc
+      port: {{ .Values.query.service.ports.grpc }}
+      protocol: TCP
+      targetPort: grpc
+  selector:
+    {{- include "jaeger.query.selectorLabels" . | nindent 4 }}

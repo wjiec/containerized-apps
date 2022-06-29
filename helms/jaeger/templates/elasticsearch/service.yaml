@@ -1,0 +1,36 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: {{ include "jaeger.elasticsearch.fullname" . }}
+spec:
+  type: {{ .Values.elasticsearch.service.type }}
+  selector:
+    {{- include "jaeger.elasticsearch.selectorLabels" . | nindent 4 }}
+  ports:
+    - name: http
+      port: {{ .Values.elasticsearch.service.ports.http }}
+      protocol: TCP
+      targetPort: http
+    - name: transport
+      port: {{ .Values.elasticsearch.service.ports.transport }}
+      protocol: TCP
+      targetPort: transport
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: {{ include "jaeger.elasticsearch.fullname" . }}-headless
+spec:
+  clusterIP: None
+  publishNotReadyAddresses: true
+  selector:
+    {{- include "jaeger.elasticsearch.selectorLabels" . | nindent 4 }}
+  ports:
+    - name: http
+      port: {{ .Values.elasticsearch.service.ports.http }}
+      protocol: TCP
+      targetPort: http
+    - name: transport
+      port: {{ .Values.elasticsearch.service.ports.transport }}
+      protocol: TCP
+      targetPort: transport

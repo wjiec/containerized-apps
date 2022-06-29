@@ -1,0 +1,2 @@
+1. Get the jaeger-query URL by running these commands:
+  kubectl get pod -A
