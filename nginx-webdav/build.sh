@@ -16,4 +16,3 @@ printf "libxml2-dev\nlibxslt-dev" > "${WORKSPACE}/${WEBDAV_MODULE}/build-deps"
 echo "https://github.com/arut/nginx-dav-ext-module/archive/master.tar.gz" > "${WORKSPACE}/${WEBDAV_MODULE}/source"
 
 docker build -t "${WEBDAV_IMAGE_NAME}" --build-arg="ENABLED_MODULES=${WEBDAV_MODULE}" "$@" .
-
